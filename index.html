@@ -266,7 +266,6 @@ document.getElementById("driverForm").addEventListener("submit", (e) => {
 
   const formData = new FormData(e.target);
   const data = {};
-
   formData.forEach((value, key) => {
     data[key] = value.trim() || "0"; // Convert empty to "0"
   });
@@ -274,35 +273,22 @@ document.getElementById("driverForm").addEventListener("submit", (e) => {
   console.log("Submitting data to:", WEB_APP_URL);
   console.log("Data being sent:", JSON.stringify(data));
 
-  fetch(WEB_APP_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  })
-  .then(response => response.json())
-  .then(result => {
-    console.log("Server Response:", result);
-    if (result.result === "success") {
-      showResponse(`Data submitted successfully to ${result.sheet}!`, "green");
-      e.target.reset();
-    } else {
-      showResponse(`Error: ${result.message}`, "red");
-    }
-  })
-  .catch(error => {
-    console.error("Error submitting form:", error);
-    showResponse(`Error submitting data: ${error.message}`, "red");
-  });
+  ffetch(WEB_APP_URL, {
+  method: "POST",
+  mode: "no-cors",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(data),
+})
+.then(() => {
+  console.log("Data submitted (no response available due to no-cors)");
+  showResponse("Data submitted successfully (assuming success due to CORS workaround)", "green");
+  e.target.reset();
+})
+.catch(error => {
+  console.error("Error submitting form:", error);
+  showResponse(`Error submitting data: ${error.message}`, "red");
 });
-
-// Display response message
-function showResponse(message, color) {
-    const responseDiv = document.getElementById("response");
-    responseDiv.textContent = message;
-    responseDiv.style.color = color;
-    responseDiv.style.display = "block";
-    setTimeout(() => responseDiv.style.display = "none", 5000);
-}
+});
     </script>
 </body>
 </html>
