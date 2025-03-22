@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -203,29 +203,29 @@
 // ##########################
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxe8cKSiinaW_SWhEnPfUouI94ldJw8szcTjMFh73H7Z1juwDCoYoXMG6j5Pt6B_tid/exec";
 
-fetch(`${WEB_APP_URL}?action=getDriverList`)
-    .then(response => response.json())
-    .then(data => {
-        console.log("Driver list received:", data);
-        if (data.drivers && Array.isArray(data.drivers)) {
-            populateDriverDropdown(data.drivers);
-        } else {
-            throw new Error("Invalid driver list format");
-        }
-    })
-    .catch(error => console.error("Error fetching driver list:", error));
+// fetch(`${WEB_APP_URL}?action=getDriverList`)
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log("Driver list received:", data);
+//         if (data.drivers && Array.isArray(data.drivers)) {
+//             populateDriverDropdown(data.drivers);
+//         } else {
+//             throw new Error("Invalid driver list format");
+//         }
+//     })
+//     .catch(error => console.error("Error fetching driver list:", error));
 
-function populateDriverDropdown(driverNames) {
-    const driverSelect = document.getElementById("driverName");
-    driverSelect.innerHTML = `<option value="">-- Select a Driver --</option>`;
+// function populateDriverDropdown(driverNames) {
+//     const driverSelect = document.getElementById("driverName");
+//     driverSelect.innerHTML = `<option value="">-- Select a Driver --</option>`;
     
-    driverNames.forEach(driver => {
-        const option = document.createElement("option");
-        option.value = driver;
-        option.textContent = driver;
-        driverSelect.appendChild(option);
-    });
-}
+//     driverNames.forEach(driver => {
+//         const option = document.createElement("option");
+//         option.value = driver;
+//         option.textContent = driver;
+//         driverSelect.appendChild(option);
+//     });
+// }
 
 // // Handle form submission
 // document.getElementById("driverForm").addEventListener("submit", (e) => {
@@ -261,37 +261,280 @@ function populateDriverDropdown(driverNames) {
 //         showResponse(`Error submitting data: ${error.message}`, "red");
 //     });
 // });
+// document.getElementById("driverForm").addEventListener("submit", (e) => {
+//   e.preventDefault();
+
+//   const formData = new FormData(e.target);
+//   const data = {};
+//   formData.forEach((value, key) => {
+//     data[key] = value.trim() || "0"; // Convert empty to "0"
+//   });
+
+//   console.log("Submitting data to:", WEB_APP_URL);
+//   console.log("Data being sent:", JSON.stringify(data));
+
+//   fetch(WEB_APP_URL, {  // Fixed typo: "ffetch" -> "fetch"
+//     method: "POST",
+//     body: JSON.stringify(data),
+//   })
+//   .then(response => response.json())
+//   .then(result => {
+//     console.log("Server Response:", result);
+//     if (result.result === "success") {
+//       showResponse(`Data submitted successfully to ${result.sheet}!`, "green");
+//       e.target.reset();
+//     } else {
+//       showResponse(`Error: ${result.message}`, "red");
+//     }
+//   })
+//   .catch(error => {
+//     console.error("Error submitting form:", error);
+//     showResponse(`Error submitting data: ${error.message}`, "red");
+//   });
+// });
+
+
+
+
+// ############################
+
+// Fetch driver list
+fetch(`${WEB_APP_URL}?action=getDriverList`)
+  .then(response => response.json())
+  .then(data => {
+    console.log("Driver list received:", data);
+    if (data.drivers && Array.isArray(data.drivers)) {
+      populateDriverDropdown(data.drivers);
+    } else {
+      throw new Error("Invalid driver list format");
+    }
+  })
+  .catch(error => console.error("Error fetching driver list:", error));
+
+function populateDriverDropdown(driverNames) {
+  const driverSelect = document.getElementById("driverName");
+  driverSelect.innerHTML = `<option value="">-- Select a Driver --</option>`;
+  driverNames.forEach(driver => {
+    const option = document.createElement("option");
+    option.value = driver;
+    option.textContent = driver;
+    driverSelect.appendChild(option);
+  });
+}
+
+// Handle form submission
+// Handle form submission
 document.getElementById("driverForm").addEventListener("submit", (e) => {
   e.preventDefault();
 
   const formData = new FormData(e.target);
   const data = {};
   formData.forEach((value, key) => {
-    data[key] = value.trim() || "0"; // Convert empty to "0"
+    if (key !== "customDriverName") {
+      data[key] = value.trim() || "0";
+    }
   });
 
   console.log("Submitting data to:", WEB_APP_URL);
   console.log("Data being sent:", JSON.stringify(data));
 
-  fetch(WEB_APP_URL, {  // Fixed typo: "ffetch" -> "fetch"
+  fetch(WEB_APP_URL, {
     method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(data),
   })
-  .then(response => response.json())
-  .then(result => {
-    console.log("Server Response:", result);
-    if (result.result === "success") {
-      showResponse(`Data submitted successfully to ${result.sheet}!`, "green");
-      e.target.reset();
-    } else {
-      showResponse(`Error: ${result.message}`, "red");
-    }
+  .then(() => {
+    console.log("Data submitted (no response available due to no-cors)");
+    showResponse("Data submitted successfully (assuming success)", "green");
+    e.target.reset();
   })
   .catch(error => {
     console.error("Error submitting form:", error);
     showResponse(`Error submitting data: ${error.message}`, "red");
   });
 });
+// Display response message
+function showResponse(message, color) {
+  const responseDiv = document.getElementById("response");
+  responseDiv.textContent = message;
+  responseDiv.style.color = color;
+  responseDiv.style.display = "block";
+  setTimeout(() => responseDiv.style.display = "none", 5000);
+}
+    </script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Calculation Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <style>
+        form {
+            font-size: 20px !important;
+            width: min(800px, 90%);
+        }
+        #response {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="text-center fw-bold fs-1 fs-md-2 fs-sm-3 mb-4">Driver Calculation Form</h1>
+    <form id="driverForm" class="mx-auto my-5 shadow p-4" method="POST">
+        <div class="mb-3">
+            <label for="driverName">Driver Name:</label>
+            <select class="form-select" id="driverName" name="driverName" required>
+                <option value="" selected disabled>Select a Driver</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="tripDestination">Trip Destination:</label>
+            <input type="text" class="form-control" id="tripDestination" name="tripDestination" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="kms">Kilometers:</label>
+            <input type="number" class="form-control" id="kms" name="kms" required step="0.01">
+        </div>
+
+        <div class="mb-3">
+            <label for="price">Price per KM:</label>
+            <input type="number" class="form-control" id="price" name="price" required step="0.01">
+        </div>
+
+        <div class="mb-3">
+            <label for="loadingTime">Loading/Unloading Time (hrs):</label>
+            <input type="number" class="form-control" id="loadingTime" name="loadingTime" step="0.01">
+        </div>
+
+        <div class="mb-3">
+            <label for="loadingPrice">Loading/Unloading Price per hr:</label>
+            <input type="number" class="form-control" id="loadingPrice" name="loadingPrice" step="0.01">
+        </div>
+
+        <div class="mb-3">
+            <label for="downtimeTime">Downtime Time (hrs):</label>
+            <input type="number" class="form-control" id="downtimeTime" name="downtimeTime" step="0.01">
+        </div>
+
+        <div class="mb-3">
+            <label for="downtimePrice">Downtime Price per hr:</label>
+            <input type="number" class="form-control" id="downtimePrice" name="downtimePrice" step="0.01">
+        </div>
+
+        <div class="mb-3">
+            <label for="overnightDays">Overnight Days:</label>
+            <input type="number" class="form-control" id="overnightDays" name="overnightDays" step="0.01">
+        </div>
+
+        <div class="mb-3">
+            <label for="overnightPrice">Overnight Price per day:</label>
+            <input type="number" class="form-control" id="overnightPrice" name="overnightPrice" step="0.01">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div id="response" class="text-center"></div>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxe8cKSiinaW_SWhEnPfUouI94ldJw8szcTjMFh73H7Z1juwDCoYoXMG6j5Pt6B_tid/exec";
+
+        // Fetch driver list
+        fetch(`${WEB_APP_URL}?action=getDriverList`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Driver list received:", data);
+                if (data.drivers && Array.isArray(data.drivers)) {
+                    const driverSelect = document.getElementById("driverName");
+                    driverSelect.innerHTML = '<option value="" selected disabled>Select a Driver</option>';
+                    data.drivers.forEach(driver => {
+                        const option = document.createElement("option");
+                        option.value = driver;
+                        option.textContent = driver;
+                        driverSelect.appendChild(option);
+                    });
+                } else {
+                    alert("Error fetching driver list: " + JSON.stringify(data));
+                }
+            })
+            .catch(error => console.error("Error fetching driver list:", error));
+
+        // Handle form submission
+        document.getElementById("driverForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+
+            // Log the form data
+            console.log("🚀 Sending Form Data:", data);
+
+            // Calculate grand total locally with debugging
+            const kms = parseFloat(data.kms) || 0;
+            const price = parseFloat(data.price) || 0;
+            const loadingTime = parseFloat(data.loadingTime) || 0;
+            const loadingPrice = parseFloat(data.loadingPrice) || 0;
+            const downtimeTime = parseFloat(data.downtimeTime) || 0;
+            const downtimePrice = parseFloat(data.downtimePrice) || 0;
+            const overnightDays = parseFloat(data.overnightDays) || 0;
+            const overnightPrice = parseFloat(data.overnightPrice) || 0;
+
+            console.log("🔍 Parsed Values:", { kms, price, loadingTime, loadingPrice, downtimeTime, downtimePrice, overnightDays, overnightPrice });
+
+            const tripTotal = kms * price;
+            const loadingTotal = loadingTime * loadingPrice;
+            const downtimeTotal = downtimeTime * downtimePrice;
+            const overnightTotal = overnightDays * overnightPrice;
+            const grandTotal = tripTotal + loadingTotal + downtimeTotal + overnightTotal;
+
+            // Log the calculated grand total
+            console.log("💲 Calculated Grand Total:", grandTotal);
+
+            // Send data to backend
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("✅ Server Response:", data);
+                if (data.result === "success") {
+                    // Show popup with grand total
+                    alert(`Data submitted successfully for ${data.sheet}!\nGrand Total: $${grandTotal.toFixed(2)}`);
+                    showResponse("Data submitted successfully!", "green");
+                    document.getElementById("driverForm").reset();
+                } else {
+                    showResponse("❌ Error: " + data.message, "red");
+                }
+            })
+            .catch(error => {
+                console.error("❌ Fetch Error:", error);
+                showResponse("❌ Error submitting data: " + error.message, "red");
+            });
+        });
+
+        // Display response message
+        function showResponse(message, color) {
+            const responseDiv = document.getElementById("response");
+            responseDiv.textContent = message;
+            responseDiv.style.color = color;
+            responseDiv.style.display = "block";
+            setTimeout(() => responseDiv.style.display = "none", 5000);
+        }
     </script>
 </body>
 </html>
