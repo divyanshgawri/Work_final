@@ -201,7 +201,7 @@
 //     setTimeout(() => responseDiv.style.display = "none", 5000);
 // }
 // ##########################
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyjRp5Z7gMELXl9Y5IQwXXEYLgPY8zeCoFEYDXsMgH4i3qQ80ovbhlt5wkpOJB62hZF/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxe8cKSiinaW_SWhEnPfUouI94ldJw8szcTjMFh73H7Z1juwDCoYoXMG6j5Pt6B_tid/exec";
 
 fetch(`${WEB_APP_URL}?action=getDriverList`)
     .then(response => response.json())
@@ -273,21 +273,24 @@ document.getElementById("driverForm").addEventListener("submit", (e) => {
   console.log("Submitting data to:", WEB_APP_URL);
   console.log("Data being sent:", JSON.stringify(data));
 
-fetch(WEB_APP_URL, {
-  method: "POST",
-  mode: "no-cors",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(data),
-})
-.then(() => {
-  console.log("Data submitted (no response available due to no-cors)");
-  showResponse("Data submitted successfully (assuming success due to CORS workaround)", "green");
-  e.target.reset();
-})
-.catch(error => {
-  console.error("Error submitting form:", error);
-  showResponse(`Error submitting data: ${error.message}`, "red");
-});
+  fetch(WEB_APP_URL, {  // Fixed typo: "ffetch" -> "fetch"
+    method: "POST",
+    body: JSON.stringify(data),
+  })
+  .then(response => response.json())
+  .then(result => {
+    console.log("Server Response:", result);
+    if (result.result === "success") {
+      showResponse(`Data submitted successfully to ${result.sheet}!`, "green");
+      e.target.reset();
+    } else {
+      showResponse(`Error: ${result.message}`, "red");
+    }
+  })
+  .catch(error => {
+    console.error("Error submitting form:", error);
+    showResponse(`Error submitting data: ${error.message}`, "red");
+  });
 });
     </script>
 </body>
