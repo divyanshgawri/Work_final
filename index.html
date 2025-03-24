@@ -399,12 +399,15 @@ function showResponse(message, color) {
                 <option value="" selected disabled>Select a Driver</option>
             </select>
         </div>
-
+        <div class="mb-3">
+            <label for="tripDate">Trip Date:</label>
+            <input type="date" class="form-control" id="tripDate" name="tripDate" required>
+        </div>
         <div class="mb-3">
             <label for="tripDestination">Trip Destination:</label>
             <input type="text" class="form-control" id="tripDestination" name="tripDestination" required>
         </div>
-
+        
         <div class="mb-3">
             <label for="kms">Kilometers:</label>
             <input type="number" class="form-control" id="kms" name="kms" required step="0.01">
@@ -451,7 +454,7 @@ function showResponse(message, color) {
     <div id="response" class="text-center"></div>
 
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxe8cKSiinaW_SWhEnPfUouI94ldJw8szcTjMFh73H7Z1juwDCoYoXMG6j5Pt6B_tid/exec";
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxpl8Bwfd8cw4FCb3G7P8IxAuxjUAvW_9ssyOOCN5VfR36cZBINQveQn7t_MuoV3OZu/exec";
 
         // Fetch driver list
         fetch(`${WEB_APP_URL}?action=getDriverList`)
